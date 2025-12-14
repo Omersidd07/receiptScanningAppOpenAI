@@ -1,21 +1,54 @@
-This project provides a Streamlit-based web application for scanning and estimating the carbon footprint of products listed on a receipt. The application uses the OpenAI GPT-4 API to process the receipt and determine the carbon footprint of each item.
+# AI Receipt Scanner (Carbon Footprint) – Streamlit
 
-Features: Upload or take a picture of a receipt Encode and process the image to extract product information and estimated carbon footprint Display the results in a structured format
+This project is a Streamlit web app that lets you upload (or photograph) a receipt, extracts the purchased line items, and estimates the carbon footprint for each item (in **g CO2**).
 
-Requirements: Python 3.7 or later Streamlit pandas requests Pillow (PIL) OpenAI API key Setup
+It uses:
+- Streamlit (UI)
+- Python (Pillow, Pandas)
+- OpenAI API (vision-capable model for receipt understanding)
 
-Clone the repository: git clone https://github.com/your-repo/receipt-carbon-footprint-scan.git
+## What it does
+1. You upload a receipt image (or take a photo in the app).
+2. The app extracts purchased items + prices.
+3. The app estimates item-level carbon footprint (g CO2) and shows the results in a table.
 
-Install the required Python packages: pip install -r requirements.txt
+> Note: Carbon footprint values are estimates based on typical lifecycle assumptions for the detected item category.
 
-Set up your OpenAI API key: Ensure you have your OpenAI API key set as an environment variable: export OPENAI_API_KEY='your-openai-api-key'
+## Setup
 
-Run the Streamlit application: streamlit run receiptscan_exec.py
+### 1) Install dependencies
+```bash
+pip install -r requirements.txt
+```
 
-Interact with the app: Upload an image of a receipt or take a picture using the webcam. The application will process the image and display the product names, prices, and estimated carbon footprint in grams of CO2.
+### 2) Set your OpenAI API key (recommended)
+Set an environment variable called `OPENAI_API_KEY`.
 
-Notes
+**Windows PowerShell**
+```powershell
+setx OPENAI_API_KEY "your_api_key_here"
+```
 
-Ensure your OpenAI API key is valid and properly set as an environment variable. The application processes JPEG images; ensure your uploaded or captured image is in the correct format. The response from the OpenAI API is expected to be structured as specified in the payload content. License
+**macOS/Linux**
+```bash
+export OPENAI_API_KEY="your_api_key_here"
+```
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+You can also paste the key directly in the app sidebar (helpful for demos), but avoid committing keys to code.
+
+### 3) Run the app
+```bash
+streamlit run receiptscan_exec.py
+```
+
+## Optional configuration
+- `OPENAI_MODEL` (env var) – set a default model name for the app.
+  - Example:
+    ```bash
+    export OPENAI_MODEL="gpt-4o-mini"
+    ```
+
+## Files
+- `receiptscan_exec.py` – Streamlit application
+- `requirements.txt` – Python dependencies
+
