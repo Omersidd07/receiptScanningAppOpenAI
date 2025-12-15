@@ -1,54 +1,58 @@
-# AI Receipt Scanner (Carbon Footprint) – Streamlit
+# AI Receipt Scanner (Streamlit + OpenAI)
 
-This project is a Streamlit web app that lets you upload (or photograph) a receipt, extracts the purchased line items, and estimates the carbon footprint for each item (in **g CO2**).
+Upload (or take) a photo of a receipt and the app will:
+1) Extract line items (name + price when visible)
+2) Estimate a rough carbon footprint per item (g CO₂)
+3) Summarize totals (subtotal/tax/total if detected)
+4) Generate a short, personalized “environmental interpretation” + suggestions
 
-It uses:
-- Streamlit (UI)
-- Python (Pillow, Pandas)
-- OpenAI API (vision-capable model for receipt understanding)
+> Note: Emissions values are directional estimates (category-based), not audited measurements.
 
-## What it does
-1. You upload a receipt image (or take a photo in the app).
-2. The app extracts purchased items + prices.
-3. The app estimates item-level carbon footprint (g CO2) and shows the results in a table.
+---
 
-> Note: Carbon footprint values are estimates based on typical lifecycle assumptions for the detected item category.
+## Demo
 
-## Setup
+- Upload a receipt image (JPG/PNG) or use your camera
+- Click **Scan receipt**
+- View extracted items, totals, and the interpretation
+- Click **Scan Another Receipt** to reset
 
-### 1) Install dependencies
-```bash
+---
+
+## Tech Stack
+
+- Streamlit UI (`app.py`) :contentReference[oaicite:0]{index=0}  
+- OpenAI calls + parsing helpers (`receipt_ai.py`) :contentReference[oaicite:1]{index=1}  
+- Requests + Pandas + Pillow
+
+---
+
+## Setup (Local)
+
+### 1) Clone and install dependencies
+git clone <your-repo-url>
+cd <your-repo-folder>
+
+### 2) Set your OpenAI API key (recommended: environment variable)
+Windows (PowerShell)
+
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-```
 
-### 2) Set your OpenAI API key (recommended)
-Set an environment variable called `OPENAI_API_KEY`.
+setx OPENAI_API_KEY "PASTE_YOUR_KEY_HERE"
+# Close and reopen PowerShell after running setx
 
-**Windows PowerShell**
-```powershell
-setx OPENAI_API_KEY "your_api_key_here"
-```
+For just the current session:
 
-**macOS/Linux**
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-```
+$env:OPENAI_API_KEY="PASTE_YOUR_KEY_HERE"
 
-You can also paste the key directly in the app sidebar (helpful for demos), but avoid committing keys to code.
+macOS / Linux
+export OPENAI_API_KEY="PASTE_YOUR_KEY_HERE"
+
+Optional: Use a .env file for local dev
+Inside .env file:
+OPENAI_API_KEY=PASTE_YOUR_KEY_HERE
+OPENAI_MODEL=gpt-5.2
 
 ### 3) Run the app
-```bash
-streamlit run receiptscan_exec.py
-```
-
-## Optional configuration
-- `OPENAI_MODEL` (env var) – set a default model name for the app.
-  - Example:
-    ```bash
-    export OPENAI_MODEL="gpt-4o-mini"
-    ```
-
-## Files
-- `receiptscan_exec.py` – Streamlit application
-- `requirements.txt` – Python dependencies
-
+In terminal command: python -m streamlit run app.py
